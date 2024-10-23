@@ -8,7 +8,7 @@ const BarChart = dynamic(() => import("./components/barChart"), {
   ssr: false,
 });
 
-const LineChart = dynamic(() => import("./components/LineChart"), {
+const LineChart = dynamic(() => import("./components/lineChart"), {
   ssr: false,
 });
 
