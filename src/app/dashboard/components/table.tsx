@@ -111,9 +111,6 @@ export default function Table() {
     }
   }, [selectIndustry, selectState, date]);
 
-  console.log(new Date(1682698259192).toDateString());
-  // console.log(date);
-
   return (
     <div style={{ height: "fit-content", width: "100%" }}>
       <Card style={{ marginTop: 12 }}>

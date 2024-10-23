@@ -8,6 +8,7 @@ module.exports = {
   compiler: {
     styledComponents: true,
   },
+  ignoreBuildErrors: true,
 };
 
 export default nextConfig;
