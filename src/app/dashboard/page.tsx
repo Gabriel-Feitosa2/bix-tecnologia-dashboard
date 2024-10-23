@@ -1,9 +1,16 @@
 "use client";
 
 import { Card } from "./style";
-import BarChart from "./components/barChart";
 import Table from "./components/table";
-import LineChart from "./components/lineChart";
+import dynamic from "next/dynamic";
+
+const BarChart = dynamic(() => import("./components/barChart"), {
+  ssr: false,
+});
+
+const LineChart = dynamic(() => import("./components/LineChart"), {
+  ssr: false,
+});
 
 function Dashboard() {
   return (
