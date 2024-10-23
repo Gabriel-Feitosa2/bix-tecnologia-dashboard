@@ -1,95 +1,146 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import { useState } from "react";
+
+import {
+  Button,
+  CircularProgress,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from "@mui/material";
+import { Container, Wrapper } from "./pageStyle";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
+
+interface FormData {
+  login: { error: boolean; value: string };
+  password: { error: boolean; value: string };
+}
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState<FormData>({
+    login: { value: "", error: false },
+    password: { value: "", error: false },
+  });
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  const router = useRouter();
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
+
+  const handleMouseUpPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
+
+  const submit = () => {
+    if (formData.login.value !== "admin") {
+      setFormData({
+        ...formData,
+        login: { value: formData.login.value, error: true },
+      });
+      return;
+    }
+    if (formData.password.value !== "admin") {
+      setFormData({
+        ...formData,
+        password: { value: formData.login.value, error: true },
+      });
+      return;
+    }
+    if (
+      formData.login.value === "admin" &&
+      formData.password.value === "admin"
+    ) {
+      setLoading(true);
+      redirect();
+    }
+  };
+
+  const redirect = () => {
+    setTimeout(() => {
+      router.push("/dashboard");
+    }, 1500);
+  };
+
+  return (
+    <Container>
+      <Wrapper>
+        <h1>Login</h1>
+        <TextField
+          id="outlined-basic"
+          name="teste"
+          label="Login"
+          variant="outlined"
+          error={formData.login.error}
+          style={{ width: 300 }}
+          onChange={(e) =>
+            setFormData({
+              ...formData,
+              login: { value: e.target.value, error: false },
+            })
+          }
+        />
+
+        <FormControl sx={{ m: 1, width: 300 }} variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">
+            Password
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={showPassword ? "text" : "password"}
+            error={formData.password.error}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  onMouseUp={handleMouseUpPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                password: { value: e.target.value, error: false },
+              })
+            }
+          />
+        </FormControl>
+
+        <Button
+          variant="contained"
+          type="submit"
+          style={{ width: "6rem" }}
+          onClick={() => submit()}
+          disabled={loading}
+        >
+          {loading ? (
+            <CircularProgress
+              style={{ width: 25, height: 25, color: "gray" }}
             />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          ) : (
+            "Login"
+          )}
+        </Button>
+      </Wrapper>
+    </Container>
   );
 }
