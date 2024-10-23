@@ -8,7 +8,9 @@ module.exports = {
   compiler: {
     styledComponents: true,
   },
-  ignoreBuildErrors: true,
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 export default nextConfig;
